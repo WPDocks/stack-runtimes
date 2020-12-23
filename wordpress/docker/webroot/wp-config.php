@@ -18,12 +18,6 @@
  * @package WordPress
  */
 
-/**
- * Set up our global environment constant and load its config first
- * Default: production
- */
-define('WP_ENV', getenv('WP_ENV') ?: 'production');
-
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
 define( 'DB_NAME', getenv('DB_NAME') ?: 'wordpress' );
@@ -72,7 +66,7 @@ define( 'NONCE_SALT',       getenv( 'NONCE_SALT' ) ?: 'put your unique phrase he
 $table_prefix = getenv('DB_PREFIX') ?: 'wp_';
 
 define( 'WP_HOME', rtrim( getenv( 'WP_HOME' ) ?: 'http://' . $_SERVER['HTTP_HOST'], '/' ) );
-define( 'WP_SITEURL', rtrim( getenv( 'WP_SITEURL' ), '/' ) ?: WP_HOME . '/wp' );
+define( 'WP_SITEURL', getenv( 'WP_SITEURL' ) ?: 'http://' . $_SERVER['HTTP_HOST'] . '/' );
 
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
@@ -82,22 +76,16 @@ if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROT
     $_SERVER['HTTPS'] = 'on';
 }
 
-$user_config = dirname( __DIR__ ) . '/config/wp-config.php';
 
-if ( file_exists( $user_config ) ) {
-    require_once $user_config;
-}
+/**
+ * Developpement settings
+ */
+if ( 'development' === getenv('WP_ENV') ) {
+	define( 'DISALLOW_FILE_EDIT', false );
+	define( 'DISALLOW_FILE_MODS', false );
 
-if ( ! defined( 'CONTENT_DIR' ) ) {
-	define( 'CONTENT_DIR', '/wp-content' );
-}
-
-if ( ! defined( 'WP_CONTENT_DIR' ) ) {
-	define( 'WP_CONTENT_DIR', __DIR__ . CONTENT_DIR );
-}
-
-if ( ! defined( 'WP_CONTENT_URL' ) ) {
-	define( 'WP_CONTENT_URL', WP_HOME . CONTENT_DIR );
+	define( 'WP_DEBUG', true );
+	define( 'SAVEQUERIES', true );
 }
 
 /**
@@ -109,20 +97,13 @@ if ( ! defined( 'AUTOMATIC_UPDATER_DISABLED' ) ) {
 if ( ! defined( 'DISABLE_WP_CRON' ) ) {
 	define( 'DISABLE_WP_CRON', getenv( 'DISABLE_WP_CRON' ) ?: false );
 }
-if ( ! defined( 'DISALLOW_FILE_EDIT' ) ) {
-	// Disable the plugin and theme file editor in the admin
-	define( 'DISALLOW_FILE_EDIT', "true" === strtolower( getenv( 'DISALLOW_FILE_EDIT' ) ?: "true" ) );
-}
-if ( ! defined( 'DISALLOW_FILE_MODS' ) ) {
-	// Disable plugin and theme updates and installation from the admin
-	define( 'DISALLOW_FILE_MODS', "true" === strtolower( getenv( 'DISALLOW_FILE_MODS' ) ?: "true" ) );
-}
+
 
 /* That's all, stop editing! Happy publishing. */
 
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', dirname( __FILE__ ) . '/wp/' );
+	define( 'ABSPATH', dirname( __FILE__ ) . '/' );
 }
 
 /** Sets up WordPress vars and included files. */

@@ -1,6 +1,6 @@
 include common.Makefile
 
-REGISTRY ?= quay.io/presslabs
+REGISTRY ?= gcr.io/wpdocks-terraform-admin
 PHP_VERSION ?= 7.4.11
 WORDPRESS_VERSION ?= 5.5.1
 

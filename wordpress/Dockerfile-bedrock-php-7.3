@@ -3,9 +3,9 @@ FROM ${PHP_BASE_IMAGE} as bedrock
 
 ENV WP_CLI_VERSION=2.2.0
 ENV WP_CLI_CONFIG_PATH=/app/wp-cli.yml
-ENV DOCUMENT_ROOT=/app/web
-ENV WP_CONTENT_DIR=${DOCUMENT_ROOT}/app
-ENV STACK_MEDIA_PATH=/app/uploads
+ENV DOCUMENT_ROOT=/app/web/wp
+ENV WP_CONTENT_DIR=/app/web/wp
+ENV STACK_MEDIA_PATH=/app/web/wp/wp-content/uploads
 USER root
 COPY docker/build-scripts /usr/local/docker/build-scripts/
 RUN set -ex \
@@ -13,7 +13,7 @@ RUN set -ex \
     && rm -rf /app \
     && mkdir -p /app/web /src \
     && { \
-       echo "path: $DOCUMENT_ROOT/wp"; \
+       echo "path: $DOCUMENT_ROOT"; \
     } | tee /app/wp-cli.yml >&2 \
     && chown -R www-data:www-data /app /src
 
