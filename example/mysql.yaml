@@ -1,0 +1,13 @@
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: mysql-cluster2
+  namespace: presslab-test
+spec:
+  replicas: 1
+  secretName: my-secret
+  volumeSpec:
+    persistentVolumeClaim:
+      resources:
+        requests:
+          storage: 1Gi
