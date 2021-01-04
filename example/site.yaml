@@ -9,9 +9,6 @@ spec:
   imagePullPolicy: Always
   domains:
     - test101.demo.wpdocks.com
-      #code:
-      #persistentVolumeClaim:
-      #volumeName: mysite-code2
   volumes:
       - name: mysite-demo
         persistentVolumeClaim:
@@ -27,7 +24,7 @@ spec:
       - name: WORDPRESS_BOOTSTRAP_PASSWORD
         value: admin
       - name: WORDPRESS_BOOTSTRAP_EMAIL
-        value: admin@ocpgroup.ma
+        value: admin@wpdocks.com
       - name: WORDPRESS_BOOTSTRAP_TITLE
         value: Test
   env:
