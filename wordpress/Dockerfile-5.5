@@ -1,15 +1,16 @@
-ARG BASE_IMAGE=quay.io/presslabs/wordpress-runtime:bedrock-php-7.4
+ARG BASE_IMAGE=gcr.io/wpdocks-terraform-admin/wordpress-runtime
 FROM ${BASE_IMAGE} as bedrock
 ENV WORDPRESS_VERSION=5.5.1
-ENV WP_CONTENT_DIR=${DOCUMENT_ROOT}/wp-content
-ENV STACK_MEDIA_PATH=/app/web/wp/wp-content/uploads
 
 # Custom Wordpress web dir
 ENV DOCUMENT_ROOT=/app/web/wp
 ENV WP_CONTENT_DIR=/app/web/wp
 ENV STACK_MEDIA_PATH=/app/web/wp/wp-content/uploads
 
+ENV WP_CONTENT_DIR=${DOCUMENT_ROOT}/wp-content
+ENV STACK_MEDIA_PATH=/app/web/wp/wp-content/uploads
+
 RUN set -ex \
     && wp core download --path=web/wp --version=${WORDPRESS_VERSION} \
     && cp /usr/local/docker/webroot/* /app/web/wp/
-ONBUILD COPY --chown=www-data:www-data wp-content /app/web/wp/wp-content
+# ONBUILD COPY --chown=www-data:www-data wp-content /app/web/wp/wp-content

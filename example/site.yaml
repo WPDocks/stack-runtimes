@@ -1,0 +1,58 @@
+apiVersion: wordpress.presslabs.org/v1alpha1
+kind: Wordpress
+metadata:
+  name: mysite-demo
+  namespace: presslab-test
+spec:
+  replicas: 1
+  image: gcr.io/wpdocks-terraform-admin/wordpress-runtime:latest
+  imagePullPolicy: Always
+  domains:
+    - test101.demo.wpdocks.com
+      #code:
+      #persistentVolumeClaim:
+      #volumeName: mysite-code2
+  volumes:
+      - name: mysite-demo
+        persistentVolumeClaim:
+          claimName: mysite-demo
+  volumeMounts:
+      - name: mysite-demo
+        mountPath: "/app"
+  wordpressPathPrefix: "/"
+  bootstrap: # wordpress install config
+    env:
+      - name: WORDPRESS_BOOTSTRAP_USER
+        value: admin
+      - name: WORDPRESS_BOOTSTRAP_PASSWORD
+        value: admin
+      - name: WORDPRESS_BOOTSTRAP_EMAIL
+        value: admin@ocpgroup.ma
+      - name: WORDPRESS_BOOTSTRAP_TITLE
+        value: Test
+  env:
+    - name: DOCUMENT_ROOT
+      value : "/app/web/wp"
+    - name: WP_CONTENT_DIR
+      value : "/app/web/wp"
+    - name: DISALLOW_FILE_MODS
+      value: "false"
+    - name: DISALLOW_FILE_EDIT
+      value: "false"
+    - name: DB_HOST
+      value: mysql-cluster2-mysql
+    - name: DB_USER
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: USER
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: PASSWORD
+    - name: DB_NAME
+      valueFrom:
+        secretKeyRef:
+          name: my-secret
+          key: DATABASE
